@@ -6,19 +6,19 @@ import org.springframework.stereotype.Component;
 import java.math.BigDecimal;
 
 @Component
-public class JdbcAccountBalanceDao implements AccountBalanceDao {
+public class JdbcAccountDao implements AccountDao {
 
     private JdbcTemplate jdbcTemplate;
 
-    public JdbcAccountBalanceDao(JdbcTemplate jdbcTemplate) {
+    public JdbcAccountDao(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
     @Override
-    public BigDecimal getCurrentBalance(int userId) {
-        String sql = "SELECT balance " +
-                     "FROM accounts " +
-                     "WHERE user_id = ?;";
+    public BigDecimal getBalanceFromId(int userId) {
+        String sql =    "SELECT balance " +
+                        "FROM accounts " +
+                        "WHERE user_id = ?;";
 
         BigDecimal currentBalance = jdbcTemplate.queryForObject(sql, BigDecimal.class, userId);
 

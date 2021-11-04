@@ -1,20 +1,18 @@
 package com.techelevator.tenmo.model;
 
-import javax.validation.constraints.Positive;
 import java.math.BigDecimal;
 
-public class AccountBalance {
+public class Account {
 
-    private int id;
+    private int accountId;
     private int userId;
-    @Positive(message = "The balance should be greater than 0.")
     private BigDecimal balance;
 
-    public int getId() {
-        return id;
+    public int getAccountId() {
+        return accountId;
     }
-    public void setId(int id) {
-        this.id = id;
+    public void setAccountId(int accountId) {
+        this.accountId = accountId;
     }
 
     public int getUserId() {
@@ -31,8 +29,8 @@ public class AccountBalance {
         this.balance = balance;
     }
 
-    public AccountBalance(int id, int userId, BigDecimal balance) {
-        this.id = id;
+    public Account(int accountId, int userId, BigDecimal balance) {
+        this.accountId = accountId;
         this.userId = userId;
         this.balance = balance;
     }
