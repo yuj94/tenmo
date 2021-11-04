@@ -52,14 +52,14 @@ public class JdbcTransferDao implements TransferDao {
     }
 
     @Override
-    public Transfer createTransfer(Transfer transfer) {
+    public int createTransfer(Transfer transfer) {
         String sql = "INSERT INTO transfers (transfer_type_id, transfer_status_id, account_from, account_to, amount) " +
                      "VALUES (?, ?, ?, ?, ?) RETURNING transfer_id;";
 
         Integer newId = jdbcTemplate.queryForObject(sql, Integer.class, TRANSFER_TYPE_SEND, TRANSFER_STATUS_APPROVED,
                 transfer.getUserFrom(), transfer.getUserTo(), transfer.getAmount());
 
-        return getTransfer(newId);
+        return newId;
     }
 
     @Override

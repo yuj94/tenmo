@@ -6,36 +6,15 @@ import java.math.BigDecimal;
 
 public class Transfer {
 
-    private int transferId;
-    private int transferTypeId;
-    private int transferStatusId;
     @Min(value = 1, message = "The field userFrom is required.")
     private int userFrom;
+
     @Min(value = 1, message = "The field userTo is required.")
     private int userTo;
+
     @Positive(message = "The amount should be greater than 0.")
     private BigDecimal amount;
 
-    public int getTransferId() {
-        return transferId;
-    }
-    public void setTransferId(int transferId) {
-        this.transferId = transferId;
-    }
-
-    public int getTransferTypeId() {
-        return transferTypeId;
-    }
-    public void setTransferTypeId(int transferTypeId) {
-        this.transferTypeId = transferTypeId;
-    }
-
-    public int getTransferStatusId() {
-        return transferStatusId;
-    }
-    public void setTransferStatusId(int transferStatusId) {
-        this.transferStatusId = transferStatusId;
-    }
 
     public int getUserFrom() {
         return userFrom;
@@ -58,10 +37,7 @@ public class Transfer {
         this.amount = amount;
     }
 
-    public Transfer(int transferId, int transferTypeId, int transferStatusId, int userFrom, int userTo, BigDecimal amount) {
-        this.transferId = transferId;
-        this.transferTypeId = transferTypeId;
-        this.transferStatusId = transferStatusId;
+    public Transfer(int userFrom, int userTo, BigDecimal amount) {
         this.userFrom = userFrom;
         this.userTo = userTo;
         this.amount = amount;

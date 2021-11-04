@@ -13,7 +13,7 @@ public interface TransferDao {
 
     Transfer getTransfer(int transferId);
 
-    Transfer createTransfer(Transfer transfer);
+    int createTransfer(Transfer transfer);
 
     Transfer addToBalance(int transferId);
 
