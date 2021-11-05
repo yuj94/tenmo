@@ -17,20 +17,20 @@ public class AccountService {
     private String baseUrl;
     private RestTemplate restTemplate = new RestTemplate();
 
-    private String authToken = null;
-
-    public void setAuthToken(String authToken) {
-        this.authToken = authToken;
-    }
+//    private String authToken = null;
+//
+//    public void setAuthToken(String authToken) {
+//        this.authToken = authToken;
+//    }
 
     public AccountService(String url){
         this.baseUrl = url; //this is localhost:8080
     }
 
-    public BigDecimal getBalance(String authToken) {
+    public BigDecimal getBalance(String token) {
         BigDecimal balance = BigDecimal.ZERO;
         try { //what is this actually doing?
-            ResponseEntity<BigDecimal> responseEntity = restTemplate.exchange(baseUrl + "balance", HttpMethod.GET, makeAuthEntity(), BigDecimal.class);
+            ResponseEntity<BigDecimal> responseEntity = restTemplate.exchange(baseUrl + "balance", HttpMethod.GET, getHttpEntity(token), BigDecimal.class);
             balance = responseEntity.getBody();
         }
         catch (RestClientResponseException e) { //error message from server
@@ -42,10 +42,10 @@ public class AccountService {
         return balance;
     }
 
-
-    private HttpEntity<Void> makeAuthEntity() { //what is this method actually doing?
+    private HttpEntity<?> getHttpEntity(String token) {
         HttpHeaders headers = new HttpHeaders();
-        headers.setBearerAuth(authToken);
-        return new HttpEntity<>(headers);
+        headers.setBearerAuth(token);
+        HttpEntity<?> entity = new HttpEntity(headers);
+        return entity;
     }
 }

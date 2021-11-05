@@ -31,7 +31,7 @@ public class TransferController {
     }
 
     @RequestMapping(path = "/transfers", method = RequestMethod.POST)
-    public int createTransfer(@Valid @RequestBody Transfer transfer) {
+    public Transfer createTransfer(@Valid @RequestBody Transfer transfer) {
         return transferDao.createTransfer(transfer);
     }
 

@@ -13,12 +13,8 @@ public interface TransferDao {
 
     Transfer getTransfer(int transferId);
 
-    int createTransfer(Transfer transfer);
+    Transfer createTransfer(Transfer transfer);
 
-    Transfer addToBalance(int transferId);
-
-    Transfer subtractFromBalance(int transferId);
-
-    //Transfer updateBalances(int userFrom, int userTo, BigDecimal amount);
+    Transfer updateBalancesAfterTransfer(int userFrom, int userTo, BigDecimal amount);
 
 }
