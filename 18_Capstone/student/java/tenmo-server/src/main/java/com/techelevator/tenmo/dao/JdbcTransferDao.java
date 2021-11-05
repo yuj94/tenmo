@@ -62,21 +62,17 @@ public class JdbcTransferDao implements TransferDao {
                      "VALUES (?, ?, ?, ?, ?) RETURNING transfer_id;";
 
         Integer newId = jdbcTemplate.queryForObject(sql, Integer.class, TRANSFER_TYPE_SEND, TRANSFER_STATUS_APPROVED,
-                transfer.getUserFrom(), transfer.getUserTo(), transfer.getAmount());
+                transfer.getAccountFrom(), transfer.getAccountTo(), transfer.getAmount());
 
         return getTransfer(newId);
     }
 
-    @Override
-    public Transfer updateBalancesAfterTransfer(int userFrom, int userTo, BigDecimal amount) {
-
-        return null;
-    }
-
     private User mapRowToUser(SqlRowSet rowSet) {
         User user = new User();
+
         user.setId(rowSet.getLong("user_id"));
         user.setUsername(rowSet.getString("username"));
+
         return user;
     }
 
@@ -85,8 +81,8 @@ public class JdbcTransferDao implements TransferDao {
 
         transfer.setTransferTypeId(results.getInt("transfer_type_id"));
         transfer.setTransferStatusId(results.getInt("transfer_status_id"));
-        transfer.setUserFrom(results.getInt("account_from"));
-        transfer.setUserTo(results.getInt("account_to"));
+        transfer.setAccountFrom(results.getInt("account_from"));
+        transfer.setAccountTo(results.getInt("account_to"));
         transfer.setAmount(results.getBigDecimal("amount"));
 
         return transfer;

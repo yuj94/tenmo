@@ -15,6 +15,5 @@ public interface TransferDao {
 
     Transfer createTransfer(Transfer transfer);
 
-    Transfer updateBalancesAfterTransfer(int userFrom, int userTo, BigDecimal amount);
 
 }
