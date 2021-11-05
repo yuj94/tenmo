@@ -1,14 +1,11 @@
 package com.techelevator.tenmo.dao;
 
-import com.techelevator.tenmo.model.Account;
 import com.techelevator.tenmo.model.Transfer;
 import com.techelevator.tenmo.model.User;
-import org.springframework.data.relational.core.sql.In;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,6 +50,7 @@ public class JdbcTransferDao implements TransferDao {
         if (results.next()) {
             transfer = mapRowToTransfer(results);
         }
+
         return transfer;
     }
 
@@ -87,4 +85,5 @@ public class JdbcTransferDao implements TransferDao {
 
         return transfer;
     }
+    
 }

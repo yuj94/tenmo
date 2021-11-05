@@ -11,17 +11,14 @@ public class Transfer {
     private int transferStatusId;
     @Min(value = 1, message = "The field accountFrom is required.")
     private int accountFrom;
-
     @Min(value = 1, message = "The field accountTo is required.")
     private int accountTo;
-
     @Positive(message = "The amount should be greater than 0.")
     private BigDecimal amount;
 
     public int getTransferId() {
         return transferId;
     }
-
     public void setTransferId(int transferId) {
         this.transferId = transferId;
     }
@@ -29,7 +26,6 @@ public class Transfer {
     public int getTransferTypeId() {
         return transferTypeId;
     }
-
     public void setTransferTypeId(int transferTypeId) {
         this.transferTypeId = transferTypeId;
     }
@@ -37,7 +33,6 @@ public class Transfer {
     public int getTransferStatusId() {
         return transferStatusId;
     }
-
     public void setTransferStatusId(int transferStatusId) {
         this.transferStatusId = transferStatusId;
     }
@@ -45,7 +40,6 @@ public class Transfer {
     public int getAccountFrom() {
         return accountFrom;
     }
-
     public void setAccountFrom(int accountFrom) {
         this.accountFrom = accountFrom;
     }
@@ -53,7 +47,6 @@ public class Transfer {
     public int getAccountTo() {
         return accountTo;
     }
-
     public void setAccountTo(int accountTo) {
         this.accountTo = accountTo;
     }
@@ -61,9 +54,12 @@ public class Transfer {
     public BigDecimal getAmount() {
         return amount;
     }
-
     public void setAmount(BigDecimal amount) {
         this.amount = amount;
+    }
+
+    public Transfer() {
+
     }
 
     public Transfer(int transferId, int transferTypeId, int transferStatusId, int accountFrom, int accountTo, BigDecimal amount) {
@@ -75,7 +71,4 @@ public class Transfer {
         this.amount = amount;
     }
 
-    public Transfer() {
-
-    }
 }

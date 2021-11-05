@@ -1,6 +1,5 @@
 package com.techelevator.tenmo.services;
 
-import com.techelevator.tenmo.model.Account;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -48,4 +47,5 @@ public class AccountService {
         HttpEntity<?> entity = new HttpEntity(headers);
         return entity;
     }
+
 }

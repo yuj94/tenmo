@@ -73,10 +73,9 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 	}
 
 	private void viewCurrentBalance() {
-		// TODO Auto-generated method stub
 		String token = currentUser.getToken();
 		BigDecimal balance = accountService.getBalance(token);
-		System.out.println(balance);
+		System.out.println("Your current account balance is: " + balance);
 	}
 
 	private void viewTransferHistory() {
@@ -158,4 +157,5 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 		String password = console.getUserInput("Password");
 		return new UserCredentials(username, password);
 	}
+
 }
