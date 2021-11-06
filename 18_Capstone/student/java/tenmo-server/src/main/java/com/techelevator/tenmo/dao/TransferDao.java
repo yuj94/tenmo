@@ -13,4 +13,6 @@ public interface TransferDao {
 
     Transfer createTransfer(Transfer transfer);
 
+    List<Transfer> getTransfersByAccountId(int accountId);
+
 }

@@ -22,11 +22,11 @@ public class AccountController {
         this.accountDao = accountDao;
     }
 
-    @RequestMapping(path = "/balance", method = RequestMethod.GET)
+    @RequestMapping(path = "/getAccountBalance", method = RequestMethod.GET)
     public BigDecimal getAccountBalance(Principal principal) {
         int userId = userDao.findIdByUsername(principal.getName());
 
-        return accountDao.getBalanceFromId(userId);
+        return accountDao.getBalanceFromUserId(userId);
     }
 
 }

@@ -7,10 +7,7 @@ import com.techelevator.tenmo.model.Account;
 import com.techelevator.tenmo.model.Transfer;
 import com.techelevator.tenmo.model.User;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
@@ -30,20 +27,41 @@ public class TransferController {
         this.accountDao = accountDao;
     }
 
-    @RequestMapping(path = "/users", method = RequestMethod.GET)
-    public List<User> listCurrentUsers() {
+    @RequestMapping(path = "/getUsers", method = RequestMethod.GET)
+    public List<User> getUsers() {
         return transferDao.getUsersList();
     }
 
-    @RequestMapping(path = "/transfers", method = RequestMethod.POST)
-    public Transfer createTransfer(Principal principal, @Valid @RequestBody Transfer transfer ) {
-        Account fromAccount = accountDao.getAccount(userDao.findIdByUsername(principal.getName()));
+    @RequestMapping(path = "/createTransfer", method = RequestMethod.POST)
+    public void createTransfer(Principal principal, @Valid @RequestBody Transfer transfer ) throws Exception {
+        transferDao.createTransfer(transfer);
+
+        //Account fromAccount = accountDao.getAccountByUserId(userDao.findIdByUsername(principal.getName()));
+        Account fromAccount = accountDao.getAccountByAccountId(transfer.getAccountFrom());
+
+        if (fromAccount.getBalance().compareTo(transfer.getAmount()) < 0) {
+            throw new Exception("You do not have enough funds for this transfer.");
+        }
+
         accountDao.subtractFromBalance(transfer.getAmount(), fromAccount.getAccountId());
 
-        Account toAccount = accountDao.getAccount(transfer.getAccountTo());
-        accountDao.addToBalance(transfer.getAmount(), toAccount.getAccountId());
+        Account toAccount = accountDao.getAccountByAccountId(transfer.getAccountTo());
 
-        return transferDao.createTransfer(transfer);
+        accountDao.addToBalance(transfer.getAmount(), toAccount.getAccountId());
+    }
+
+    @RequestMapping(path = "/getTransfers", method = RequestMethod.GET)
+    public List<Transfer> getTransfers(Principal principal) {
+        int userId = userDao.findIdByUsername(principal.getName());
+
+        Account account = accountDao.getAccountByUserId(userId);
+
+        return transferDao.getTransfersByAccountId(account.getAccountId());
+    }
+
+    @RequestMapping(path = "/getTransfers/{transferId}", method = RequestMethod.GET)
+    public Transfer getTransfers(@PathVariable int transferId) {
+        return transferDao.getTransfer(transferId);
     }
 
 }
