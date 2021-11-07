@@ -12,7 +12,6 @@ import java.math.BigDecimal;
 
 public class AccountService {
 
-    //public static final String API_BASE_URL = "http://localhost:8080/";
     private String baseUrl;
     private RestTemplate restTemplate = new RestTemplate();
 
@@ -29,7 +28,7 @@ public class AccountService {
     public BigDecimal getBalance(String token) {
         BigDecimal balance = BigDecimal.ZERO;
         try { //what is this actually doing?
-            ResponseEntity<BigDecimal> responseEntity = restTemplate.exchange(baseUrl + "balance", HttpMethod.GET, getHttpEntity(token), BigDecimal.class);
+            ResponseEntity<BigDecimal> responseEntity = restTemplate.exchange(baseUrl + "getAccountBalance", HttpMethod.GET, getHttpEntity(token), BigDecimal.class);
             balance = responseEntity.getBody();
         }
         catch (RestClientResponseException e) { //error message from server

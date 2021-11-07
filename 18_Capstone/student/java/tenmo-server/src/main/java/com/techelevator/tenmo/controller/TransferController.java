@@ -34,19 +34,20 @@ public class TransferController {
 
     @RequestMapping(path = "/createTransfer", method = RequestMethod.POST)
     public void createTransfer(Principal principal, @Valid @RequestBody Transfer transfer ) throws Exception {
-        transferDao.createTransfer(transfer);
-
         //Account fromAccount = accountDao.getAccountByUserId(userDao.findIdByUsername(principal.getName()));
         Account fromAccount = accountDao.getAccountByAccountId(transfer.getAccountFrom());
-
-        if (fromAccount.getBalance().compareTo(transfer.getAmount()) < 0) {
-            throw new Exception("You do not have enough funds for this transfer.");
-        }
-
-        accountDao.subtractFromBalance(transfer.getAmount(), fromAccount.getAccountId());
-
         Account toAccount = accountDao.getAccountByAccountId(transfer.getAccountTo());
 
+        if (toAccount == null) {
+            throw new Exception("The account you are trying to send money to does not exist. Try again.");
+        }
+
+        if (fromAccount.getBalance().compareTo(transfer.getAmount()) < 0) {
+            throw new Exception("You do not have enough funds for this transfer. Try again.");
+        }
+
+        transferDao.createTransfer(transfer);
+        accountDao.subtractFromBalance(transfer.getAmount(), fromAccount.getAccountId());
         accountDao.addToBalance(transfer.getAmount(), toAccount.getAccountId());
     }
 
