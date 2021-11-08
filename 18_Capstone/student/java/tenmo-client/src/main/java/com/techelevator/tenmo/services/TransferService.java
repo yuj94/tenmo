@@ -1,6 +1,5 @@
 package com.techelevator.tenmo.services;
 
-import com.techelevator.tenmo.model.AuthenticatedUser;
 import com.techelevator.tenmo.model.Transfer;
 import com.techelevator.tenmo.model.User;
 import org.springframework.http.*;
@@ -9,13 +8,11 @@ import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
-import java.util.Scanner;
 
 public class TransferService {
 
     private String baseUrl;
     private RestTemplate restTemplate = new RestTemplate();
-    private Scanner userInput = new Scanner(System.in);
 
     public TransferService(String url){
         this.baseUrl = url; //this is localhost:8080
@@ -36,10 +33,10 @@ public class TransferService {
         return users;
     }
 
-    public Transfer createTransfer(String token) {
+    public Transfer createTransfer(Transfer transfer, String token) {
         Transfer newTransfer = new Transfer();
         try {
-            ResponseEntity<Transfer> responseEntity = restTemplate.exchange(baseUrl + "createTransfer", HttpMethod.POST, getTransferEntity(newTransfer, token), Transfer.class);
+            newTransfer = restTemplate.postForObject(baseUrl + "createTransfer", getTransferEntity(transfer, token), Transfer.class);
         }
         catch (RestClientResponseException e) { //error message from server
             System.out.println("Error returned from server: " + e.getRawStatusCode() + ": " + e.getStatusText());
@@ -50,11 +47,13 @@ public class TransferService {
         return newTransfer;
     }
 
-    public Transfer makeTransferObject(int userId, BigDecimal amount, AuthenticatedUser currentUser){
+    public Transfer makeTransferObject(int userId, BigDecimal amount){ //set id, type, status
         Transfer transfer = new Transfer();
-        transfer.setAccountFrom(currentUser.getUser().getId());
-        transfer.setAccountTo();
-        return transfer;
+        transfer.setAccountFrom(1003); //find actual accountId from current user
+        transfer.setAccountTo(userId);
+        transfer.setAmount(amount);
+        return transfer; //figure out error returned from server: 500
+        // test for nonexistent toAccount and balance
     }
 
     private HttpEntity<?> getHttpEntity(String token) {

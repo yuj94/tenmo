@@ -1,6 +1,7 @@
 package com.techelevator.tenmo;
 
 import com.techelevator.tenmo.model.AuthenticatedUser;
+import com.techelevator.tenmo.model.Transfer;
 import com.techelevator.tenmo.model.User;
 import com.techelevator.tenmo.model.UserCredentials;
 import com.techelevator.tenmo.services.AccountService;
@@ -101,6 +102,11 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 		}
 		String userId = console.getUserInput("Enter ID of user you are sending to (0 to cancel)");
 		String amount = console.getUserInput("Enter Amount");
+		int parseUserId = Integer.parseInt(userId);
+		BigDecimal parseAmount = new BigDecimal(amount);
+
+		Transfer userTransferObject = transferService.makeTransferObject(parseUserId, parseAmount);
+		transferService.createTransfer(userTransferObject, token);
 	}
 
 	private void requestBucks() {
