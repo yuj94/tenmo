@@ -1,13 +1,16 @@
 package com.techelevator.tenmo;
 
 import com.techelevator.tenmo.model.AuthenticatedUser;
+import com.techelevator.tenmo.model.User;
 import com.techelevator.tenmo.model.UserCredentials;
 import com.techelevator.tenmo.services.AccountService;
 import com.techelevator.tenmo.services.AuthenticationService;
 import com.techelevator.tenmo.services.AuthenticationServiceException;
+import com.techelevator.tenmo.services.TransferService;
 import com.techelevator.view.ConsoleService;
 
 import java.math.BigDecimal;
+import java.util.Scanner;
 
 public class App {
 
@@ -29,16 +32,18 @@ private static final String API_BASE_URL = "http://localhost:8080/";
     private ConsoleService console;
     private AuthenticationService authenticationService;
     private AccountService accountService;
+    private TransferService transferService;
 
     public static void main(String[] args) {
-    	App app = new App(new ConsoleService(System.in, System.out), new AuthenticationService(API_BASE_URL), new AccountService(API_BASE_URL));
+    	App app = new App(new ConsoleService(System.in, System.out), new AuthenticationService(API_BASE_URL), new AccountService(API_BASE_URL), new TransferService(API_BASE_URL));
     	app.run();
     }
 
-    public App(ConsoleService console, AuthenticationService authenticationService, AccountService accountService) {
+    public App(ConsoleService console, AuthenticationService authenticationService, AccountService accountService, TransferService transferService) {
 		this.console = console;
 		this.authenticationService = authenticationService;
 		this.accountService = accountService;
+		this.transferService = transferService;
 	}
 
 	public void run() {
@@ -89,8 +94,13 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 	}
 
 	private void sendBucks() {
-		// TODO Auto-generated method stub
-		
+		String token = currentUser.getToken();
+		User[] users = transferService.getAllUsers(token);
+		for (User user : users){
+			System.out.println(user.getId() + ": " + user.getUsername());
+		}
+		String userId = console.getUserInput("Enter ID of user you are sending to (0 to cancel)");
+		String amount = console.getUserInput("Enter Amount");
 	}
 
 	private void requestBucks() {
