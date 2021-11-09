@@ -68,15 +68,15 @@ public class Transfer {
 
     @Override
     public String toString() {
-        return "\n--------------------------------------------" +
-                "\n Transfer Details" +
+        return  "\n--------------------------------------------" +
+                "\nTransfer Details" +
                 "\n--------------------------------------------" +
                 "\n Id: " + transferId +
                 "\n From: " + accountFrom +
                 "\n To: " + accountTo +
                 "\n Type: " + transferTypeId +
                 "\n Status: " + transferStatusId +
-                "\n Amount: " + amount;
+                "\n Amount: $" + amount;
     }
 
 }

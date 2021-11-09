@@ -33,6 +33,36 @@ public class TransferService {
         return users;
     }
 
+    public Transfer[] getAllTransfers(String token) {
+        Transfer[] transfers = null;
+        try {
+            ResponseEntity<Transfer[]> responseEntity = restTemplate.exchange(baseUrl + "getTransfers", HttpMethod.GET, getHttpEntity(token), Transfer[].class);
+            transfers = responseEntity.getBody();
+        }
+        catch (RestClientResponseException e) { //error message from server
+            System.out.println("Error returned from server: " + e.getRawStatusCode());
+        }
+        catch (ResourceAccessException e) { //couldn't reach server
+            System.out.println("Error: Couldn't reach server.");
+        }
+        return transfers;
+    }
+
+    public Transfer getTransfer(int transferId, String token) {
+        Transfer transfer = null;
+        try {
+            ResponseEntity<Transfer> responseEntity = restTemplate.exchange(baseUrl + "getTransfers/" + transferId, HttpMethod.GET, getHttpEntity(token), Transfer.class);
+            transfer = responseEntity.getBody();
+        }
+        catch (RestClientResponseException e) { //error message from server
+            System.out.println("Error returned from server: " + e.getRawStatusCode());
+        }
+        catch (ResourceAccessException e) { //couldn't reach server
+            System.out.println("Error: Couldn't reach server.");
+        }
+        return transfer;
+    }
+
     public Transfer createTransfer(Transfer transfer, String token) {
         try {
             ResponseEntity<Transfer> response = restTemplate.exchange(baseUrl + "createTransfer", HttpMethod.POST, getTransferEntity(transfer, token), Transfer.class);

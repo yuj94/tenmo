@@ -87,23 +87,68 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 
 	private void viewTransferHistory() {
 		System.out.println("--------------------------------------------");
-		System.out.println(String.format(("%-15s %-15s %-15s"), "Transfers ID", "From/To", "Amount"));
+		System.out.printf(("%-15s %-15s %-15s%n"), "Transfers ID", "From/To", "Amount");
 		System.out.println("--------------------------------------------");
 
 		String token = currentUser.getToken();
-		User[] users = transferService.getAllUsers(token);
+		Transfer[] transfers = transferService.getAllTransfers(token);
+		List<Integer> transferList = new ArrayList<>();
+		String fromTo = null;
 
+		for (Transfer transfer : transfers) {
+			transferList.add(transfer.getTransferId());
 
+			if (transfer.getAccountFrom() == currentUser.getUser().getId()) {
+				fromTo = "To:" + transfer.getAccountFrom();
+			}
+			if (transfer.getAccountTo() == currentUser.getUser().getId()) {
+				fromTo = "From:" + transfer.getAccountTo();
+			}
+
+			System.out.printf(("%-15s %-15s %-15s%n"), transfer.getTransferId(), fromTo, transfer.getAmount());
+		}
+
+		System.out.println();
+
+		String transferId = console.getUserInput("Please enter transfer ID to view details (0 to cancel)");
+
+		int parseTransferId = Integer.parseInt(transferId);
+
+		if (parseTransferId == 0) {
+			mainMenu();
+		} else {
+			while (!transferList.contains(parseTransferId)) {
+				if (parseTransferId == 0) {
+					mainMenu();
+				} else {
+					transferId = console.getUserInput("This ID does not exist. Please try again. Enter ID of transfer you are trying to view (0 to cancel)");
+					parseTransferId = Integer.parseInt(transferId);
+				}
+			}
+		}
+
+		Transfer transfer = transferService.getTransfer(parseTransferId, token);
+
+		//System.out.println(transfer);
+
+		System.out.println("--------------------------------------------");
+		System.out.println("Transfer Details");
+		System.out.println("--------------------------------------------");
+		System.out.println("Id: x" + transfer.getTransferId());
+		System.out.println("From: x" + transfer.getAccountFrom());
+		System.out.println("To: x" + transfer.getAccountTo());
+		System.out.println("Type: x" + transfer.getTransferTypeId());
+		System.out.println("Status: x" + transfer.getTransferStatusId());
+		System.out.println("Amount: $x" + transfer.getAmount());
 	}
 
 	private void viewPendingRequests() {
 		// TODO Auto-generated method stub
-		
 	}
 
 	private void sendBucks() {
 		System.out.println("--------------------------------------------");
-		System.out.println(String.format(("%-15s %-15s"), "Users ID", "Name"));
+		System.out.printf(("%-15s %-15s%n"), "Users ID", "Name");
 		System.out.println("--------------------------------------------");
 
 		String token = currentUser.getToken();
@@ -112,8 +157,7 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 
 		for (User user : users) {
 			userList.add(user.getId());
-			//System.out.println(user.getId() + ": " + user.getUsername());
-			System.out.println(String.format(("%-15s %-15s"), user.getId(), user.getUsername()));
+			System.out.printf(("%-15s %-15s%n"), user.getId(), user.getUsername());
 		}
 
 		System.out.println();
@@ -151,7 +195,6 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 
 	private void requestBucks() {
 		// TODO Auto-generated method stub
-		
 	}
 	
 	private void exitProgram() {
