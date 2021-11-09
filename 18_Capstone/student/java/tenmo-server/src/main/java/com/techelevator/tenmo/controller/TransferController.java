@@ -34,9 +34,14 @@ public class TransferController {
 
     @RequestMapping(path = "/createTransfer", method = RequestMethod.POST)
     public void createTransfer(Principal principal, @Valid @RequestBody Transfer transfer ) throws Exception {
-        //Account fromAccount = accountDao.getAccountByUserId(userDao.findIdByUsername(principal.getName()));
-        Account fromAccount = accountDao.getAccountByAccountId(transfer.getAccountFrom());
+        int fromAccountId = accountDao.getAccountIdByUserId(userDao.findIdByUsername(principal.getName()));
+        int toAccountFromUserId = accountDao.getAccountIdByUserId(transfer.getAccountTo());
+
+        transfer.setAccountFrom(fromAccountId);
+        transfer.setAccountTo(toAccountFromUserId);
+
         Account toAccount = accountDao.getAccountByAccountId(transfer.getAccountTo());
+        Account fromAccount = accountDao.getAccountByAccountId(fromAccountId);
 
         if (toAccount == null) {
             throw new Exception("The account you are trying to send money to does not exist. Try again.");
@@ -55,9 +60,9 @@ public class TransferController {
     public List<Transfer> getTransfers(Principal principal) {
         int userId = userDao.findIdByUsername(principal.getName());
 
-        Account account = accountDao.getAccountByUserId(userId);
+        int accountId = accountDao.getAccountIdByUserId(userId);
 
-        return transferDao.getTransfersByAccountId(account.getAccountId());
+        return transferDao.getTransfersByAccountId(accountId);
     }
 
     @RequestMapping(path = "/getTransfers/{transferId}", method = RequestMethod.GET)

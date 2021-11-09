@@ -78,4 +78,5 @@ public class Transfer {
                 "\n Status: " + transferStatusId +
                 "\n Amount: " + amount;
     }
+
 }

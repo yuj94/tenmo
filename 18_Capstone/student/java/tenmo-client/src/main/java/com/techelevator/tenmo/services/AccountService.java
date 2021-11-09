@@ -15,24 +15,18 @@ public class AccountService {
     private String baseUrl;
     private RestTemplate restTemplate = new RestTemplate();
 
-//    private String authToken = null;
-//
-//    public void setAuthToken(String authToken) {
-//        this.authToken = authToken;
-//    }
-
     public AccountService(String url){
         this.baseUrl = url; //this is localhost:8080
     }
 
     public BigDecimal getBalance(String token) {
         BigDecimal balance = BigDecimal.ZERO;
-        try { //what is this actually doing?
+        try {
             ResponseEntity<BigDecimal> responseEntity = restTemplate.exchange(baseUrl + "getAccountBalance", HttpMethod.GET, getHttpEntity(token), BigDecimal.class);
             balance = responseEntity.getBody();
         }
         catch (RestClientResponseException e) { //error message from server
-            System.out.println("Error returned from server: " + e.getRawStatusCode() + ": " + e.getStatusText());
+            System.out.println("Error returned from server: " + e.getRawStatusCode());
         }
         catch (ResourceAccessException e) { //couldn't reach server
             System.out.println("Error: Couldn't reach server.");

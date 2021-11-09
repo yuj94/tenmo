@@ -11,7 +11,8 @@ import com.techelevator.tenmo.services.TransferService;
 import com.techelevator.view.ConsoleService;
 
 import java.math.BigDecimal;
-import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.List;
 
 public class App {
 
@@ -97,15 +98,35 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 	private void sendBucks() {
 		String token = currentUser.getToken();
 		User[] users = transferService.getAllUsers(token);
-		for (User user : users){
+		List<Integer> userList = new ArrayList<>();
+
+		for (User user : users) {
+			userList.add(user.getId());
 			System.out.println(user.getId() + ": " + user.getUsername());
 		}
+
+		System.out.println();
+
 		String userId = console.getUserInput("Enter ID of user you are sending to (0 to cancel)");
-		String amount = console.getUserInput("Enter Amount");
+
 		int parseUserId = Integer.parseInt(userId);
+
+		while (!userList.contains(parseUserId)) {
+			userId = console.getUserInput("This ID does not exist. Please try again. Enter ID of user you are sending to (0 to cancel)");
+			parseUserId = Integer.parseInt(userId);
+		}
+
+		String amount = console.getUserInput("Enter Amount");
+
 		BigDecimal parseAmount = new BigDecimal(amount);
 
+		while (parseAmount.compareTo(BigDecimal.ZERO) < 0) {
+			amount = console.getUserInput("Please enter a positive amount. Please try again. Enter Amount");
+			parseAmount = new BigDecimal(amount);
+		}
+
 		Transfer userTransferObject = transferService.makeTransferObject(parseUserId, parseAmount);
+
 		transferService.createTransfer(userTransferObject, token);
 	}
 

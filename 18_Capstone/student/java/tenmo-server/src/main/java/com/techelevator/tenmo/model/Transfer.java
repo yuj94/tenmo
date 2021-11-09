@@ -9,7 +9,6 @@ public class Transfer {
     private int transferId;
     private int transferTypeId;
     private int transferStatusId;
-    @Min(value = 1, message = "The field accountFrom is required.")
     private int accountFrom;
     @Min(value = 1, message = "The field accountTo is required.")
     private int accountTo;
