@@ -86,8 +86,14 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 	}
 
 	private void viewTransferHistory() {
-		// TODO Auto-generated method stub
-		
+		System.out.println("--------------------------------------------");
+		System.out.println(String.format(("%-15s %-15s %-15s"), "Transfers ID", "From/To", "Amount"));
+		System.out.println("--------------------------------------------");
+
+		String token = currentUser.getToken();
+		User[] users = transferService.getAllUsers(token);
+
+
 	}
 
 	private void viewPendingRequests() {
@@ -96,13 +102,18 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 	}
 
 	private void sendBucks() {
+		System.out.println("--------------------------------------------");
+		System.out.println(String.format(("%-15s %-15s"), "Users ID", "Name"));
+		System.out.println("--------------------------------------------");
+
 		String token = currentUser.getToken();
 		User[] users = transferService.getAllUsers(token);
 		List<Integer> userList = new ArrayList<>();
 
 		for (User user : users) {
 			userList.add(user.getId());
-			System.out.println(user.getId() + ": " + user.getUsername());
+			//System.out.println(user.getId() + ": " + user.getUsername());
+			System.out.println(String.format(("%-15s %-15s"), user.getId(), user.getUsername()));
 		}
 
 		System.out.println();
@@ -111,9 +122,17 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 
 		int parseUserId = Integer.parseInt(userId);
 
-		while (!userList.contains(parseUserId)) {
-			userId = console.getUserInput("This ID does not exist. Please try again. Enter ID of user you are sending to (0 to cancel)");
-			parseUserId = Integer.parseInt(userId);
+		if (parseUserId == 0) {
+			mainMenu();
+		} else {
+			while (!userList.contains(parseUserId)) {
+				if (parseUserId == 0) {
+					mainMenu();
+				} else {
+					userId = console.getUserInput("This ID does not exist. Please try again. Enter ID of user you are sending to (0 to cancel)");
+					parseUserId = Integer.parseInt(userId);
+				}
+			}
 		}
 
 		String amount = console.getUserInput("Enter Amount");
