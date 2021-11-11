@@ -144,6 +144,7 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 
 	private void viewPendingRequests() {
 		// TODO Auto-generated method stub
+		System.out.println("This portion is under maintenance. Please come back and try again.");
 	}
 
 	private void sendBucks() {
@@ -162,30 +163,43 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 
 		System.out.println();
 
-		String userId = console.getUserInput("Enter ID of user you are sending to (0 to cancel)");
+		int parseUserId = 1;
 
-		int parseUserId = Integer.parseInt(userId);
+		while(parseUserId < 1000) {
+			String userId = console.getUserInput("Enter ID of user you are sending to (0 to cancel)");
 
-		if (parseUserId == 0) {
-			mainMenu();
-		} else {
-			while (!userList.contains(parseUserId)) {
+			try {
+				parseUserId = Integer.parseInt(userId);
+
 				if (parseUserId == 0) {
 					mainMenu();
-				} else {
-					userId = console.getUserInput("This ID does not exist. Please try again. Enter ID of user you are sending to (0 to cancel)");
-					parseUserId = Integer.parseInt(userId);
 				}
+
+				if (!userList.contains(parseUserId)) {
+					System.out.println("This ID does not exist. Please try use an ID from the list.");
+					parseUserId = 1;
+				}
+
+			} catch (NumberFormatException e) {
+				System.out.println("This is not a valid ID. Please try using numbers.");
 			}
 		}
 
-		String amount = console.getUserInput("Enter Amount");
+		BigDecimal parseAmount = new BigDecimal(0);
 
-		BigDecimal parseAmount = new BigDecimal(amount);
+		while (parseAmount.compareTo(BigDecimal.ZERO) == 0) {
+			String userAmount = console.getUserInput("Enter Amount");
 
-		while (parseAmount.compareTo(BigDecimal.ZERO) < 0) {
-			amount = console.getUserInput("Please enter a positive amount. Please try again. Enter Amount");
-			parseAmount = new BigDecimal(amount);
+			try {
+				parseAmount = new BigDecimal(userAmount);
+
+				if (parseAmount.compareTo(BigDecimal.ZERO) < 0) {
+					System.out.println("Please enter a positive amount. Please try again.");
+					parseAmount = new BigDecimal(0);
+				}
+			} catch  (Exception w) {
+				System.out.println("This is not a valid amount. Please try using numbers.");
+			}
 		}
 
 		Transfer userTransferObject = transferService.makeTransferObject(parseUserId, parseAmount);
@@ -195,6 +209,7 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 
 	private void requestBucks() {
 		// TODO Auto-generated method stub
+		System.out.println("This portion is under maintenance. Please come back and try again.");
 	}
 	
 	private void exitProgram() {

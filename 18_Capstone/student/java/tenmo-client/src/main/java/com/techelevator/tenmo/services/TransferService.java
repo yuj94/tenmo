@@ -63,10 +63,10 @@ public class TransferService {
         return transfer;
     }
 
-    public Transfer createTransfer(Transfer transfer, String token) {
+    public void createTransfer(Transfer transfer, String token) {
         try {
             ResponseEntity<Transfer> response = restTemplate.exchange(baseUrl + "createTransfer", HttpMethod.POST, getTransferEntity(transfer, token), Transfer.class);
-            return response.getBody();
+            response.getBody();
         }
         catch (RestClientResponseException e) { //error message from server
             System.out.println("Error returned from server: " + e.getRawStatusCode());
@@ -74,7 +74,6 @@ public class TransferService {
         catch (ResourceAccessException e) { //couldn't reach server
             System.out.println("Error: Couldn't reach server.");
         }
-        return null;
     }
 
     public Transfer makeTransferObject(int userId, BigDecimal amount){ //set transfer id, transfer type, transfer status

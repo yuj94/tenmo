@@ -29,7 +29,8 @@ public class TransferController {
 
     @RequestMapping(path = "/getUsers", method = RequestMethod.GET)
     public List<User> getUsers() {
-        return transferDao.getUsersList();
+        //return transferDao.getUsersList();
+        return userDao.findAll();
     }
 
     @RequestMapping(path = "/createTransfer", method = RequestMethod.POST)
