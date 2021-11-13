@@ -5,6 +5,7 @@ import com.techelevator.tenmo.dao.TransferDao;
 import com.techelevator.tenmo.dao.UserDao;
 import com.techelevator.tenmo.model.Account;
 import com.techelevator.tenmo.model.Transfer;
+import com.techelevator.tenmo.model.TransferDTO;
 import com.techelevator.tenmo.model.User;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -34,12 +35,14 @@ public class TransferController {
     }
 
     @RequestMapping(path = "/createTransfer", method = RequestMethod.POST)
-    public void createTransfer(Principal principal, @Valid @RequestBody Transfer transfer ) throws Exception {
+    public void createTransfer(Principal principal, @Valid @RequestBody TransferDTO transferDTO ) throws Exception {
         int fromAccountId = accountDao.getAccountIdByUserId(userDao.findIdByUsername(principal.getName()));
-        int toAccountFromUserId = accountDao.getAccountIdByUserId(transfer.getAccountTo());
+        int toAccountIdFromUserId = accountDao.getAccountIdByUserId(transferDTO.getUserIdTo());
 
+        Transfer transfer = new Transfer();
         transfer.setAccountFrom(fromAccountId);
-        transfer.setAccountTo(toAccountFromUserId);
+        transfer.setAccountTo(toAccountIdFromUserId);
+        transfer.setAmount(transferDTO.getAmount());
 
         Account toAccount = accountDao.getAccountByAccountId(transfer.getAccountTo());
         Account fromAccount = accountDao.getAccountByAccountId(fromAccountId);

@@ -1,9 +1,6 @@
 package com.techelevator.tenmo;
 
-import com.techelevator.tenmo.model.AuthenticatedUser;
-import com.techelevator.tenmo.model.Transfer;
-import com.techelevator.tenmo.model.User;
-import com.techelevator.tenmo.model.UserCredentials;
+import com.techelevator.tenmo.model.*;
 import com.techelevator.tenmo.services.AccountService;
 import com.techelevator.tenmo.services.AuthenticationService;
 import com.techelevator.tenmo.services.AuthenticationServiceException;
@@ -202,7 +199,7 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 			}
 		}
 
-		Transfer userTransferObject = transferService.makeTransferObject(parseUserId, parseAmount);
+		TransferDTO userTransferObject = transferService.makeTransferObject(parseUserId, parseAmount);
 
 		transferService.createTransfer(userTransferObject, token);
 	}

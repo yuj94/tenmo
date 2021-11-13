@@ -33,7 +33,7 @@ public class JdbcAccountDao implements AccountDao {
                         "FROM accounts " +
                         "WHERE user_id = ?;";
 
-        int accountId = jdbcTemplate.queryForObject(sql, int.class, userId);
+        int accountId = jdbcTemplate.queryForObject(sql, Integer.class, userId);
 
         return accountId;
     }

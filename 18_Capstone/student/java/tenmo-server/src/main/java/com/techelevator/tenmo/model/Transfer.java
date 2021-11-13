@@ -1,7 +1,5 @@
 package com.techelevator.tenmo.model;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.Positive;
 import java.math.BigDecimal;
 
 public class Transfer {
@@ -10,9 +8,7 @@ public class Transfer {
     private int transferTypeId;
     private int transferStatusId;
     private int accountFrom;
-    @Min(value = 1, message = "The field accountTo is required.")
     private int accountTo;
-    @Positive(message = "The amount should be greater than 0.")
     private BigDecimal amount;
 
     public int getTransferId() {

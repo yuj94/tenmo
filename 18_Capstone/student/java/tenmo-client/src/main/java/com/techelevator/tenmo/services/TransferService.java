@@ -1,6 +1,7 @@
 package com.techelevator.tenmo.services;
 
 import com.techelevator.tenmo.model.Transfer;
+import com.techelevator.tenmo.model.TransferDTO;
 import com.techelevator.tenmo.model.User;
 import org.springframework.http.*;
 import org.springframework.web.client.ResourceAccessException;
@@ -63,9 +64,9 @@ public class TransferService {
         return transfer;
     }
 
-    public void createTransfer(Transfer transfer, String token) {
+    public void createTransfer(TransferDTO transferDto, String token) {
         try {
-            ResponseEntity<Transfer> response = restTemplate.exchange(baseUrl + "createTransfer", HttpMethod.POST, getTransferEntity(transfer, token), Transfer.class);
+            ResponseEntity<TransferDTO> response = restTemplate.exchange(baseUrl + "createTransfer", HttpMethod.POST, getTransferEntity(transferDto, token), TransferDTO.class);
             response.getBody();
         }
         catch (RestClientResponseException e) { //error message from server
@@ -76,11 +77,11 @@ public class TransferService {
         }
     }
 
-    public Transfer makeTransferObject(int userId, BigDecimal amount){ //set transfer id, transfer type, transfer status
-        Transfer transfer = new Transfer();
-        transfer.setAccountTo(userId);
-        transfer.setAmount(amount);
-        return transfer;
+    public TransferDTO makeTransferObject(int userId, BigDecimal amount){ //set transfer id, transfer type, transfer status
+        TransferDTO transferDto = new TransferDTO();
+        transferDto.setUserIdTo(userId);
+        transferDto.setAmount(amount);
+        return transferDto;
     }
 
     private HttpEntity<?> getHttpEntity(String token) {
@@ -90,11 +91,11 @@ public class TransferService {
         return entity;
     }
 
-    private HttpEntity<Transfer> getTransferEntity(Transfer transfer, String token) {
+    private HttpEntity<TransferDTO> getTransferEntity(TransferDTO transferDto, String token) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setBearerAuth(token);
-        HttpEntity<Transfer> entity = new HttpEntity(transfer, headers);
+        HttpEntity<TransferDTO> entity = new HttpEntity(transferDto, headers);
         return entity;
     }
 
