@@ -11,6 +11,10 @@ public class TransferDTO {
     @Positive(message = "The amount should be greater than 0.")
     private BigDecimal amount;
 
+    public TransferDTO() {
+
+    }
+
     public int getUserIdTo() {
         return userIdTo;
     }

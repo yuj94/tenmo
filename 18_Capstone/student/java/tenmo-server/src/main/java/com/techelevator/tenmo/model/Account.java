@@ -8,6 +8,10 @@ public class Account {
     private int userId;
     private BigDecimal balance;
 
+    public Account() {
+
+    }
+
     public int getAccountId() {
         return accountId;
     }
@@ -26,16 +30,6 @@ public class Account {
         return balance;
     }
     public void setBalance(BigDecimal balance) {
-        this.balance = balance;
-    }
-
-    public Account() {
-
-    }
-
-    public Account(int accountId, int userId, BigDecimal balance) {
-        this.accountId = accountId;
-        this.userId = userId;
         this.balance = balance;
     }
 

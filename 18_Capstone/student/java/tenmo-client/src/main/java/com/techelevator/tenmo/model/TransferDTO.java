@@ -7,6 +7,10 @@ public class TransferDTO {
     private int userIdTo;
     private BigDecimal amount;
 
+    public TransferDTO() {
+
+    }
+
     public int getUserIdTo() {
         return userIdTo;
     }

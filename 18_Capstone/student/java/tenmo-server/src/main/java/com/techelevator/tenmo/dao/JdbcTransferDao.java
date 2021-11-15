@@ -38,14 +38,20 @@ public class JdbcTransferDao implements TransferDao {
     public Transfer getTransfer(int transferId) {
         Transfer transfer = null;
 
-        String sql =    "SELECT * " +
+        String sql =    "SELECT transfer_id, transfers.transfer_type_id, transfers.transfer_status_id, account_from, account_to, amount, u1.user_id AS u1_user_id_from, u1.username AS u1_username_from, u2.user_id AS u2_user_id_to, u2.username AS u2_username_to, transfer_type_desc, transfer_status_desc " +
                         "FROM transfers " +
+                        "INNER JOIN accounts AS a1 ON transfers.account_from = a1.account_id " +
+                        "INNER JOIN users AS u1 ON a1.user_id = u1.user_id " +
+                        "INNER JOIN accounts AS a2 ON transfers.account_to = a2.account_id " +
+                        "INNER JOIN users AS u2 ON a2.user_id = u2.user_id " +
+                        "INNER JOIN transfer_types ON transfers.transfer_type_id = transfer_types.transfer_type_id " +
+                        "INNER JOIN transfer_statuses ON transfers.transfer_status_id = transfer_statuses.transfer_status_id " +
                         "WHERE transfer_id = ?;";
 
         SqlRowSet results = jdbcTemplate.queryForRowSet(sql, transferId);
 
         if (results.next()) {
-            transfer = mapRowToTransfer(results);
+            transfer = mapRowToTransferWithUsersAndDesc(results);
         }
 
         return transfer;
@@ -53,8 +59,8 @@ public class JdbcTransferDao implements TransferDao {
 
     @Override
     public void createTransfer(Transfer transfer) {
-        String sql = "INSERT INTO transfers (transfer_type_id, transfer_status_id, account_from, account_to, amount) " +
-                     "VALUES (2, 2, ?, ?, ?) RETURNING transfer_id;";
+        String sql =    "INSERT INTO transfers (transfer_type_id, transfer_status_id, account_from, account_to, amount) " +
+                        "VALUES (2, 2, ?, ?, ?) RETURNING transfer_id;";
 
         Integer newId = jdbcTemplate.queryForObject(sql, Integer.class, transfer.getAccountFrom(), transfer.getAccountTo(), transfer.getAmount());
 
@@ -65,14 +71,20 @@ public class JdbcTransferDao implements TransferDao {
     public List<Transfer> getTransfersByAccountId(int accountId) {
         List<Transfer> transfers = new ArrayList<>();
 
-        String sql =    "SELECT * " +
+        String sql =    "SELECT transfer_id, transfers.transfer_type_id, transfers.transfer_status_id, account_from, account_to, amount, u1.user_id AS u1_user_id_from, u1.username AS u1_username_from, u2.user_id AS u2_user_id_to, u2.username AS u2_username_to, transfer_type_desc, transfer_status_desc " +
                         "FROM transfers " +
+                        "INNER JOIN accounts AS a1 ON transfers.account_from = a1.account_id " +
+                        "INNER JOIN users AS u1 ON a1.user_id = u1.user_id " +
+                        "INNER JOIN accounts AS a2 ON transfers.account_to = a2.account_id " +
+                        "INNER JOIN users AS u2 ON a2.user_id = u2.user_id " +
+                        "INNER JOIN transfer_types ON transfers.transfer_type_id = transfer_types.transfer_type_id " +
+                        "INNER JOIN transfer_statuses ON transfers.transfer_status_id = transfer_statuses.transfer_status_id " +
                         "WHERE account_from = ? OR account_to = ?;";
 
         SqlRowSet results = jdbcTemplate.queryForRowSet(sql, accountId, accountId);
 
         while (results.next()) {
-            transfers.add(mapRowToTransfer(results));
+            transfers.add(mapRowToTransferWithUsersAndDesc(results));
         }
 
         return transfers;
@@ -87,7 +99,7 @@ public class JdbcTransferDao implements TransferDao {
         return user;
     }
 
-    private Transfer mapRowToTransfer(SqlRowSet results) {
+    private Transfer mapRowToTransferWithUsersAndDesc(SqlRowSet results) {
         Transfer transfer = new Transfer();
 
         transfer.setTransferId(results.getInt("transfer_id"));
@@ -96,6 +108,12 @@ public class JdbcTransferDao implements TransferDao {
         transfer.setAccountFrom(results.getInt("account_from"));
         transfer.setAccountTo(results.getInt("account_to"));
         transfer.setAmount(results.getBigDecimal("amount"));
+        transfer.setUserIdFrom(results.getInt("u1_user_id_from"));
+        transfer.setUserNameFrom(results.getString("u1_username_from"));
+        transfer.setUserIdTo(results.getInt("u2_user_id_to"));
+        transfer.setUserNameTo(results.getString("u2_username_to"));
+        transfer.setTransferTypeDesc(results.getString("transfer_type_desc"));
+        transfer.setTransferStatusDesc(results.getString("transfer_status_desc"));
 
         return transfer;
     }

@@ -84,7 +84,7 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 
 	private void viewTransferHistory() {
 		System.out.println("--------------------------------------------");
-		System.out.printf(("%-15s %-15s %-15s%n"), "Transfers ID", "From/To", "Amount");
+		System.out.printf(("%-15s %-15s %-15s %n"), "Transfers ID", "From/To", "Amount");
 		System.out.println("--------------------------------------------");
 
 		String token = currentUser.getToken();
@@ -95,48 +95,64 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 		for (Transfer transfer : transfers) {
 			transferList.add(transfer.getTransferId());
 
-			if (transfer.getAccountFrom() == currentUser.getUser().getId()) {
-				fromTo = "To:" + transfer.getAccountFrom();
-			}
-			if (transfer.getAccountTo() == currentUser.getUser().getId()) {
-				fromTo = "From:" + transfer.getAccountTo();
+			if (transfer.getUserIdFrom() == currentUser.getUser().getId()) {
+				fromTo = "To: " + transfer.getUserNameTo();
 			}
 
-			System.out.printf(("%-15s %-15s %-15s%n"), transfer.getTransferId(), fromTo, transfer.getAmount());
+			if (transfer.getUserIdTo() == currentUser.getUser().getId()) {
+				fromTo = "From: " + transfer.getUserNameFrom();
+			}
+
+			System.out.printf(("%-15s %-15s $%-15s %n"), transfer.getTransferId(), fromTo, transfer.getAmount());
 		}
 
 		System.out.println();
 
-		String transferId = console.getUserInput("Please enter transfer ID to view details (0 to cancel)");
+		int parseTransferId = 1;
 
-		int parseTransferId = Integer.parseInt(transferId);
-
-		if (parseTransferId == 0) {
-			mainMenu();
-		} else {
-			while (!transferList.contains(parseTransferId)) {
-				if (parseTransferId == 0) {
-					mainMenu();
-				} else {
-					transferId = console.getUserInput("This ID does not exist. Please try again. Enter ID of transfer you are trying to view (0 to cancel)");
-					parseTransferId = Integer.parseInt(transferId);
-				}
-			}
-		}
+		parseTransferId = promptForTransferId(transferList, parseTransferId);
 
 		Transfer transfer = transferService.getTransfer(parseTransferId, token);
 
-		//System.out.println(transfer);
+		//System.out.println(transfer.toString());
 
 		System.out.println("--------------------------------------------");
 		System.out.println("Transfer Details");
 		System.out.println("--------------------------------------------");
-		System.out.println("Id: x" + transfer.getTransferId());
-		System.out.println("From: x" + transfer.getAccountFrom());
-		System.out.println("To: x" + transfer.getAccountTo());
-		System.out.println("Type: x" + transfer.getTransferTypeId());
-		System.out.println("Status: x" + transfer.getTransferStatusId());
-		System.out.println("Amount: $x" + transfer.getAmount());
+		System.out.println("Id: " + transfer.getTransferId());
+		System.out.println("From: " + transfer.getUserNameFrom());
+		System.out.println("To: " + transfer.getUserNameTo());
+		System.out.println("Type: " + transfer.getTransferTypeDesc());
+		System.out.println("Status: " + transfer.getTransferStatusDesc());
+		System.out.println("Amount: $" + transfer.getAmount());
+	}
+
+	private int promptForTransferId(List<Integer> transferList, int parseTransferId) {
+		boolean isValid = false;
+
+		while(!isValid) {
+			String transferId = console.getUserInput("Please enter transfer ID to view details (0 to cancel)");
+
+			try {
+				parseTransferId = Integer.parseInt(transferId);
+
+				if (parseTransferId == 0) {
+					mainMenu();
+				}
+
+				if (!transferList.contains(parseTransferId)) {
+					System.out.println("This ID does not exist. Please try use an ID from the list.");
+					parseTransferId = 1;
+				} else {
+					isValid = true;
+				}
+
+			} catch (NumberFormatException e) {
+				System.out.println("This is not a valid ID. Please try using numbers.");
+			}
+		}
+
+		return parseTransferId;
 	}
 
 	private void viewPendingRequests() {
@@ -146,7 +162,7 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 
 	private void sendBucks() {
 		System.out.println("--------------------------------------------");
-		System.out.printf(("%-15s %-15s%n"), "Users ID", "Name");
+		System.out.printf(("%-15s %-15s %n"), "Users ID", "Name");
 		System.out.println("--------------------------------------------");
 
 		String token = currentUser.getToken();
@@ -155,14 +171,28 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 
 		for (User user : users) {
 			userList.add(user.getId());
-			System.out.printf(("%-15s %-15s%n"), user.getId(), user.getUsername());
+			System.out.printf(("%-15s %-15s %n"), user.getId(), user.getUsername());
 		}
 
 		System.out.println();
 
 		int parseUserId = 1;
 
-		while(parseUserId < 1000) {
+		parseUserId = promptForUserId(userList, parseUserId);
+
+		BigDecimal parseAmount = new BigDecimal(0);
+
+		parseAmount = promptForAmount(parseAmount);
+
+		TransferDTO userTransferObject = transferService.makeTransferObject(parseUserId, parseAmount);
+
+		transferService.createTransfer(userTransferObject, token);
+	}
+
+	private int promptForUserId(List<Integer> userList, int parseUserId) {
+		boolean isValid = false;
+
+		while(!isValid) {
 			String userId = console.getUserInput("Enter ID of user you are sending to (0 to cancel)");
 
 			try {
@@ -175,6 +205,8 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 				if (!userList.contains(parseUserId)) {
 					System.out.println("This ID does not exist. Please try use an ID from the list.");
 					parseUserId = 1;
+				} else {
+					isValid = true;
 				}
 
 			} catch (NumberFormatException e) {
@@ -182,8 +214,10 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 			}
 		}
 
-		BigDecimal parseAmount = new BigDecimal(0);
+		return parseUserId;
+	}
 
+	private BigDecimal promptForAmount(BigDecimal parseAmount) {
 		while (parseAmount.compareTo(BigDecimal.ZERO) == 0) {
 			String userAmount = console.getUserInput("Enter Amount");
 
@@ -198,10 +232,7 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 				System.out.println("This is not a valid amount. Please try using numbers.");
 			}
 		}
-
-		TransferDTO userTransferObject = transferService.makeTransferObject(parseUserId, parseAmount);
-
-		transferService.createTransfer(userTransferObject, token);
+		return parseAmount;
 	}
 
 	private void requestBucks() {

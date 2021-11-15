@@ -10,6 +10,16 @@ public class Transfer {
     private int accountFrom;
     private int accountTo;
     private BigDecimal amount;
+    private int userIdFrom;
+    private String userNameFrom;
+    private int userIdTo;
+    private String userNameTo;
+    private String transferTypeDesc;
+    private String transferStatusDesc;
+
+    public Transfer() {
+
+    }
 
     public int getTransferId() {
         return transferId;
@@ -53,17 +63,46 @@ public class Transfer {
         this.amount = amount;
     }
 
-    public Transfer() {
-
+    public int getUserIdFrom() {
+        return userIdFrom;
+    }
+    public void setUserIdFrom(int userIdFrom) {
+        this.userIdFrom = userIdFrom;
     }
 
-    public Transfer(int transferId, int transferTypeId, int transferStatusId, int accountFrom, int accountTo, BigDecimal amount) {
-        this.transferId = transferId;
-        this.transferTypeId = transferTypeId;
-        this.transferStatusId = transferStatusId;
-        this.accountFrom = accountFrom;
-        this.accountTo = accountTo;
-        this.amount = amount;
+    public String getUserNameFrom() {
+        return userNameFrom;
+    }
+    public void setUserNameFrom(String userNameFrom) {
+        this.userNameFrom = userNameFrom;
+    }
+
+    public int getUserIdTo() {
+        return userIdTo;
+    }
+    public void setUserIdTo(int userIdTo) {
+        this.userIdTo = userIdTo;
+    }
+
+    public String getUserNameTo() {
+        return userNameTo;
+    }
+    public void setUserNameTo(String userNameTo) {
+        this.userNameTo = userNameTo;
+    }
+
+    public String getTransferTypeDesc() {
+        return transferTypeDesc;
+    }
+    public void setTransferTypeDesc(String transferTypeDesc) {
+        this.transferTypeDesc = transferTypeDesc;
+    }
+
+    public String getTransferStatusDesc() {
+        return transferStatusDesc;
+    }
+    public void setTransferStatusDesc(String transferStatusDesc) {
+        this.transferStatusDesc = transferStatusDesc;
     }
 
 }
