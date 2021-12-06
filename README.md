@@ -29,8 +29,11 @@ Explore the API using Postman. You can access the following endpoints:
 To run this project, make sure you have the following software installed:
 
 - [Java Development Kit (JDK)](https://www.oracle.com/java/technologies/)
-- [IntelliJ](https://www.jetbrains.com/idea/)
 - [PostgreSQL](https://www.postgresql.org/)
+
+Recommended technologies:
+
+- [IntelliJ](https://www.jetbrains.com/idea/)
 - [DbVisualizer](https://www.dbvis.com/)
 - [Postman](https://www.postman.com/)
 
