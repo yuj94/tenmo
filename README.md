@@ -32,7 +32,6 @@ To run this project, make sure you have the following software installed:
 - [PostgreSQL](https://www.postgresql.org/)
 
 Recommended tools:
-
 - [IntelliJ](https://www.jetbrains.com/idea/)
 - [DbVisualizer](https://www.dbvis.com/)
 - [Postman](https://www.postman.com/)
