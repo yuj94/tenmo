@@ -31,7 +31,7 @@ To run this project, make sure you have the following software installed:
 - [Java Development Kit (JDK)](https://www.oracle.com/java/technologies/)
 - [PostgreSQL](https://www.postgresql.org/)
 
-Recommended technologies:
+Recommended tools:
 
 - [IntelliJ](https://www.jetbrains.com/idea/)
 - [DbVisualizer](https://www.dbvis.com/)
