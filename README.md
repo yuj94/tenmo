@@ -2,8 +2,8 @@
 _Duration: 6 Days_
 
 ## Description
-A RESTful API that allows authorized users to send virtual money between users using the command line. (Pair programming)
-- Utilized Spring Boot to create a RESTful API that accepted requests from clients to view, update, and transfer balances while following an MVC design pattern and implementing the DAO pattern with an interface to a PostgreSQL database
+A RESTful API server and a CLI application that allows authorized users to send virtual money between accounts. (Pair programming)
+- Utilized Spring Boot to create an application that handles requests to perform CRUD operations to view and transfer balances with MVC and DAO patterns
 
 ## Technologies Used
 Project was built with:
